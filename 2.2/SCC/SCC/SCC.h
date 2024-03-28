@@ -2,8 +2,9 @@
 #define SCC_H
 #include <iostream>
 #include <string>
+#include <vector>
 
-void FindStrongComponents(std::istream& inputFile);
+std::vector<std::vector<int>> FindStrongComponents(std::istream& inputFile);
 void FindStrongComponentsFromFile(std::string const& fileName);
 
 #endif

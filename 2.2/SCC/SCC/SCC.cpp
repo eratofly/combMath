@@ -4,10 +4,6 @@
 
 using namespace std;
 
-vector<vector<int>> graph, graphTransposed;
-vector<bool> used;
-vector<int> order, component;
-
 bool OpenFile(ifstream& inputFile, string filePath)
 {
 	inputFile.open(filePath);
@@ -22,39 +18,47 @@ bool OpenFile(ifstream& inputFile, string filePath)
 	return true;
 }
 
-void DepthFirstSearch(int& vertex)
+void DepthFirstSearch(int& vertex, vector<vector<int>> graph, vector<bool>& used, vector<int>& order)
 {
 	used[vertex] = true;
 	for (size_t i = 0; i < graph[vertex].size(); i++)
 	{
 		if (!used[graph[vertex][i]])
 		{
-			DepthFirstSearch(graph[vertex][i]);
+			DepthFirstSearch(graph[vertex][i], graph, used, order);
 		}
 	}
 
 	order.push_back(vertex);
 }
 
-void DepthFirstSearchInTransposedGraph(int& vertex)
+void DepthFirstSearchInTransposedGraph(int& vertex, vector<vector<int>> graphTransposed, vector<bool>& used, vector<int>& component)
 {
 	used[vertex] = true;
 	component.push_back(vertex);
-	for (size_t i = 0; i < graphTransposed[vertex].size(); i++)
+	for (size_t i = 0; i < graphTransposed[vertex].size(); i++)	
 	{
 		if (!used[graphTransposed[vertex][i]])
 		{
-			DepthFirstSearchInTransposedGraph(graphTransposed[vertex][i]);
+			DepthFirstSearchInTransposedGraph(graphTransposed[vertex][i], graphTransposed, used, component);
 		}
 	}
 }
 
-void FindStrongComponents(istream& inputFile)
+vector<vector<int>> FindStrongComponents(istream& inputFile)
 {
+	vector<vector<int>> graph{}, graphTransposed{};
+	vector<bool> used;
+	vector<int> order, component;
+	vector<vector<int>> result;
+	
 	size_t vertexesCount;
 	int fromVertex, toVertex;
 
-	inputFile >> vertexesCount;
+	if (!(inputFile >> vertexesCount))
+	{
+		return {};
+	}
 	graph.assign(vertexesCount, {});
 	graphTransposed.assign(vertexesCount, {});
 	order = {};
@@ -72,7 +76,7 @@ void FindStrongComponents(istream& inputFile)
 	{
 		if (!used[vertex])
 		{
-			DepthFirstSearch(vertex);
+			DepthFirstSearch(vertex, graph, used, order);
 		}
 	}
 
@@ -82,15 +86,16 @@ void FindStrongComponents(istream& inputFile)
 		int vertex = order[vertexesCount - 1 - i];
 		if (!used[vertex])
 		{
-			DepthFirstSearchInTransposedGraph(vertex);
+			DepthFirstSearchInTransposedGraph(vertex, graphTransposed, used, component);
 			for (auto i = 0; i < component.size(); i++)
 			{
-				cout << component[i] + 1 << " ";
+				component[i] += 1;
 			}
-			cout << endl;
+			result.push_back(component);
 			component.clear();
 		}
 	}
+	return result;
 }
 
 void FindStrongComponentsFromFile(string const& fileName)
