@@ -21,28 +21,12 @@ std::vector<std::vector<double>> CreateKirchhoffMatrix(std::vector<std::vector<d
 		matrixKirchhoff[i][i] = deg;
 	}
 
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-			std::cout << matrixKirchhoff[i][j] << ' ';
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-
-
 	return matrixKirchhoff;
 };
 
 double FindDet(std::vector<std::vector<double>>& matrix)
 {
 	int n = static_cast<int>(matrix.size());
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-			std::cout << matrix[i][j] << "";
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
 
 	double det = 1;
 
@@ -82,31 +66,6 @@ double FindDet(std::vector<std::vector<double>>& matrix)
 	return det;
 }
 
-//std::vector<std::vector<double>> GetMinor(std::vector<std::vector<double>> matrix, int row, int column)
-//{
-//	int n = static_cast<int>(matrix.size());
-//	std::vector<std::vector<double>> matrixMinor(n - 1, std::vector<double>(n - 1, 0));
-//	int rowCount = 0, columnCount = 0;
-//
-//	for (int i = 0; i < n; i++)
-//	{
-//		if (i != row)
-//		{
-//			columnCount = 0;
-//			for (int j = 0; j < n; j++)
-//			{
-//				if (j != column)
-//				{
-//					matrixMinor[rowCount][columnCount] = matrix[i][j];
-//					columnCount++;
-//				}
-//			}
-//			rowCount++;
-//		}
-//	}
-//	return matrixMinor;
-//}
-
 std::vector<std::vector<double>> GetMinor(std::vector<std::vector<double>>& matrix, int row, int col)
 {
 	std::vector<std::vector<double>> minor;
@@ -136,7 +95,6 @@ double Cofactor(std::vector<std::vector<double>>& matrix, int row, int col)
 	int sign = ((row + col) % 2 == 0) ? 1 : -1;
 	std::vector<std::vector<double>> minor = GetMinor(matrix, row, col);
 
-	// Вычисляем определитель минора
 	double det = 0.0;
 	int n = minor.size();
 	if (n == 1)
@@ -168,32 +126,14 @@ std::vector<std::vector<double>> AlgebraicComplement(std::vector<std::vector<dou
 	return result;
 }
 
-//std::vector<std::vector<double>> FindAlgDop(std::vector<std::vector<double>>& matrix)
-//{
-//	int n = static_cast<int>(matrix.size());
-//
-//	// находим определитель матрицы A
-//	int det = FindDet(matrix);
-//
-//	if (det > 0) // это для знака алгебраического дополнения
-//		det = -1;
-//	else
-//		det = 1;
-//
-//	std::vector<std::vector<double>> matrixMinor(n - 1, std::vector<double>(n - 1, 0));
-//
-//	for (int j = 0; j < n; j++)
-//	{
-//		for (int i = 0; i < n; i++)
-//		{
-//			// получаем алгебраическое дополнение
-//			matrixMinor = GetMinor(matrix, j, i);
-//			if ((i + j) % 2 == 0)
-//				matrixMinor[j][i] = -det * FindDet(matrixMinor);
-//			else
-//				matrixMinor[j][i] = det * FindDet(matrixMinor);
-//		}
-//	}
-//
-//	return matrixMinor;
-//}
+double CountSpanningTrees(std::vector<std::vector<double>>& algebraicComplementMatrix)
+{
+	if (algebraicComplementMatrix[0][0] < 0)
+	{
+		return (-algebraicComplementMatrix[0][0]);
+	}
+	else
+	{
+		return (algebraicComplementMatrix[0][0]);
+	}
+}

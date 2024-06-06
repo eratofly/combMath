@@ -18,7 +18,7 @@ int main()
 
 	std::vector<std::vector<double>> matr = CreateKirchhoffMatrix(matrix);
 	matr = AlgebraicComplement(matrix);
-	double countSpanningTree = FindDet(matr);
+	double countSpanningTree = CountSpanningTrees(matr);
 	std::cout << "Count of spanning tree = " << countSpanningTree;
 }
 

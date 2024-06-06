@@ -15,7 +15,7 @@ TEST_CASE("Test with 4x4")
 	
 	std::vector<std::vector<double>> kirchhoffMatrix = CreateKirchhoffMatrix(adjacencyMatrix);
 	std::vector<std::vector<double>> matr = AlgebraicComplement(kirchhoffMatrix);
-	double result = FindDet(matr);
+	double result = CountSpanningTrees(matr);
 
 	double expected = 3.0;
 
@@ -33,7 +33,7 @@ TEST_CASE("Test with hard 4x4")
 
 	std::vector<std::vector<double>> kirchhoffMatrix = CreateKirchhoffMatrix(adjacencyMatrix);
 	std::vector<std::vector<double>> matr = AlgebraicComplement(kirchhoffMatrix);
-	double result = FindDet(matr);
+	double result = CountSpanningTrees(matr);
 	double expected = 8;
 
 	REQUIRE(result == expected);
@@ -51,9 +51,47 @@ TEST_CASE("Test with 5x5")
 
 	std::vector<std::vector<double>> kirchhoffMatrix = CreateKirchhoffMatrix(adjacencyMatrix);
 	std::vector<std::vector<double>> matr = AlgebraicComplement(kirchhoffMatrix);
-	double result = FindDet(matr);
+	double result = CountSpanningTrees(matr);
 
 	double expected = 21;
+
+	REQUIRE(result == expected);
+}
+
+
+TEST_CASE("Full graph")
+{
+	std::vector<std::vector<double>> adjacencyMatrix = {
+		{ 0, 1, 1, 1, 1 },
+		{ 1, 0, 1, 1, 1 },
+		{ 1, 1, 0, 1, 1 },
+		{ 1, 1, 1, 0, 1 },
+		{ 1, 1, 1, 1, 0 }
+	};
+	
+	
+	std::vector<std::vector<double>> kirchhoffMatrix = CreateKirchhoffMatrix(adjacencyMatrix);
+	std::vector<std::vector<double>> matr = AlgebraicComplement(kirchhoffMatrix);
+	double result = CountSpanningTrees(matr);
+	int expected = 125;
+
+	REQUIRE(result == expected);
+}
+
+TEST_CASE("2 components")
+{
+	std::vector<std::vector<double>> adjacencyMatrix = {
+		{ 0, 1, 0, 0 },
+		{ 1, 0, 0, 0 },
+		{ 0, 0, 0, 1 },
+		{ 0, 0, 1, 0 }
+	};
+
+	std::vector<std::vector<double>> kirchhoffMatrix = CreateKirchhoffMatrix(adjacencyMatrix);
+	std::vector<std::vector<double>> matr = AlgebraicComplement(kirchhoffMatrix);
+	double result = CountSpanningTrees(matr);
+
+	int expected = 0;
 
 	REQUIRE(result == expected);
 }
